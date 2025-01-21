@@ -118,7 +118,7 @@ class ChromaDocumentStore:
                     tenant=self._tenant,
                     headers={
                       'x-chroma-token': self._api_key
-                    }
+                    },
                     database=self._database,
                 )
             elif self._persist_path is None:
