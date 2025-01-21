@@ -36,7 +36,7 @@ class ChromaDocumentStore:
         host: Optional[str] = None,
         port: Optional[int] = None,
         tenant: Optional[str] = None,
-        headers: Optional[Dict[str, str]] = None,
+        api_key: Optional[str] = None,
         database: Optional[str] = None,
         distance_function: Literal["l2", "cosine", "ip"] = "l2",
         metadata: Optional[dict] = None,
@@ -90,7 +90,7 @@ class ChromaDocumentStore:
         self._host = host
         self._port = port
         self._tenant = tenant
-        self._headers = headers
+        self._api_key = api_key
         self._database = database
 
         self._initialized = False
@@ -116,7 +116,9 @@ class ChromaDocumentStore:
                     ssl=True,
                     host='api.trychroma.com',
                     tenant=self._tenant,
-                    headers=self._headers,
+                    headers={
+                      'x-chroma-token': self._api_key
+                    }
                     database=self._database,
                 )
             elif self._persist_path is None:
