@@ -35,6 +35,9 @@ class ChromaDocumentStore:
         persist_path: Optional[str] = None,
         host: Optional[str] = None,
         port: Optional[int] = None,
+        tenant: Optional[str] = None,
+        headers: Optional[Dict[str, str]] = None,
+        database: Optional[str] = None,
         distance_function: Literal["l2", "cosine", "ip"] = "l2",
         metadata: Optional[dict] = None,
         **embedding_function_params,
@@ -86,6 +89,9 @@ class ChromaDocumentStore:
         self._persist_path = persist_path
         self._host = host
         self._port = port
+        self._tenant = tenant
+        self._headers = headers
+        self._database = database
 
         self._initialized = False
 
@@ -104,6 +110,14 @@ class ChromaDocumentStore:
                 client = chromadb.HttpClient(
                     host=self._host,
                     port=self._port,
+                )
+            elif self._tenant:
+                client = chromadb.HttpClient(
+                    ssl=True,
+                    host='api.trychroma.com',
+                    tenant=self._tenant,
+                    headers=self._headers,
+                    database=self._database,
                 )
             elif self._persist_path is None:
                 # In-memory storage
